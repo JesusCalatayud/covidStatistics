@@ -3062,7 +3062,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Burkina Faso"
+        "name": "Burkina-Faso"
       },
       "geometry": {
         "type": "Polygon",
@@ -3624,7 +3624,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Bosnia and Herzegovina"
+        "name": "Bosnia-and-Herzegovina"
       },
       "geometry": {
         "type": "Polygon",
@@ -5376,7 +5376,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Central African Republic"
+        "name": "CAR"
       },
       "geometry": {
         "type": "Polygon",
@@ -10516,7 +10516,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Ivory Coast"
+        "name": "Ivory-Coast"
       },
       "geometry": {
         "type": "Polygon",
@@ -10972,7 +10972,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Democratic Republic of the Congo"
+        "name": "DRC"
       },
       "geometry": {
         "type": "Polygon",
@@ -11474,7 +11474,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Republic of the Congo"
+        "name": "Congo"
       },
       "geometry": {
         "type": "Polygon",
@@ -12590,7 +12590,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Czech Republic"
+        "name": "Czechia"
       },
       "geometry": {
         "type": "Polygon",
@@ -16194,7 +16194,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Guinea Bissau"
+        "name": "Guinea-Bissau"
       },
       "geometry": {
         "type": "Polygon",
@@ -24466,7 +24466,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Macedonia"
+        "name": "North-Macedonia"
       },
       "geometry": {
         "type": "Polygon",
@@ -29762,7 +29762,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Papua New Guinea"
+        "name": "Papua-New-Guinea"
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -33412,7 +33412,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Western Sahara"
+        "name": "Western-Sahara"
       },
       "geometry": {
         "type": "Polygon",
@@ -33538,7 +33538,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Saudi Arabia"
+        "name": "Saudi-Arabia"
       },
       "geometry": {
         "type": "Polygon",
@@ -34186,7 +34186,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "South Sudan"
+        "name": "South-Sudan"
       },
       "geometry": {
         "type": "Polygon",
@@ -34822,7 +34822,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Sierra Leone"
+        "name": "Sierra-Leone"
       },
       "geometry": {
         "type": "Polygon",
@@ -35018,7 +35018,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Somaliland"
+        "name": "Somalia"
       },
       "geometry": {
         "type": "Polygon",
@@ -35119,21 +35119,7 @@
             [
               48.93813,
               9.451749
-            ]
-          ]
-        ]
-      },
-      "id": "ABV"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Somalia"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
+            ],
             [
               49.72862,
               11.5789
@@ -41556,7 +41542,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "South Africa"
+        "name": "South-Africa"
       },
       "geometry": {
         "type": "Polygon",
@@ -42368,7 +42354,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Korea"
+        "name": "S-Korea"
       },
       "geometry": {
         "type": "Polygon",

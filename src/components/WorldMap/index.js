@@ -25,13 +25,50 @@ const styles = {
     }
 };
 
-const WorldMap = () => {
+const WorldMap = ({ filter }) => {
 
     const [countryData, setCountryData] = useState([]);
+    const [dataToRender, setDataToRender] = useState([]);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (countryData.length) {
+            return () => {
+                const data = countryData[0].response.map(el => {
+                    const countriesData = countries.features.filter(country => country.properties.name === el.country)
+                    if (countriesData.length) {
+                        return (
+                            {
+                                id: countriesData[0].id,
+                                value: filter[0].name === 'Coronavirus Cases' ? el.cases.total :
+                                    filter[0].name === 'Total Recovered' ? el.cases.recovered :
+                                        filter[0].name === 'Total Death' ? el.deaths.total :
+                                            el.cases.active,
+                                name: filter[0].name
+                            }
+                        );
+                    } else {
+                        return undefined;
+                    };
+                });
+                const filteredData = data.filter(el => typeof (el) !== 'undefined');
+                setDataToRender([...filteredData]);
+            };
+        } else {
+            return async () => {
+                const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
+                        "x-rapidapi-host": "covid-193.p.rapidapi.com"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => data)
+
+                setCountryData([data]);
+            }
+        }
+    }, [filter, countryData]);
 
     const tooltipFormatter = (e) => {
         if (e && e.feature && e.feature.value) {
@@ -44,49 +81,19 @@ const WorldMap = () => {
                         </p>
                     </div>
                 </div>
-            )
+            );
         } else {
             return <div></div>
-        }
-    }
-
-    const fetchData = async () => {
-        const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
-                "x-rapidapi-host": "covid-193.p.rapidapi.com"
-            }
-        })
-            .then(response => response.json())
-            .then(data => data.response.map(el => {
-                console.log(el)
-                const magicMax = countries.features.filter(country => country.properties.name === el.country)
-                if (magicMax.length) {
-                    return (
-                        {
-                            id: magicMax[0].id,
-                            value: el.cases.total,
-                            name: 'Active Cases'
-                        }
-                    );
-                } else {
-                    return undefined;
-                };
-            }));
-        const magicMagic = data.filter(el => typeof (el) !== 'undefined')
-        console.log(magicMagic)
-        setCountryData([...magicMagic])
-
-    }
+        };
+    };
 
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <ResponsiveChoropleth
-                data={[...countryData]}
+                data={[...dataToRender]}
                 features={countries.features}
                 margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                colors="blues"
+                colors={filter[0].mapColor}
                 domain={[0, 1000000]}
                 unknownColor="#666666"
                 label="properties.name"
