@@ -31,43 +31,48 @@ const WorldMap = ({ filter }) => {
     const [dataToRender, setDataToRender] = useState([]);
 
     useEffect(() => {
-        if (countryData.length) {
-            return () => {
-                const data = countryData[0].response.map(el => {
-                    const countriesData = countries.features.filter(country => country.properties.name === el.country)
-                    if (countriesData.length) {
-                        return (
-                            {
-                                id: countriesData[0].id,
-                                value: filter[0].name === 'Coronavirus Cases' ? el.cases.total :
-                                    filter[0].name === 'Total Recovered' ? el.cases.recovered :
-                                        filter[0].name === 'Total Death' ? el.deaths.total :
-                                            el.cases.active,
-                                name: filter[0].name
-                            }
-                        );
-                    } else {
-                        return undefined;
-                    };
-                });
-                const filteredData = data.filter(el => typeof (el) !== 'undefined');
-                setDataToRender([...filteredData]);
-            };
-        } else {
-            return async () => {
-                const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
-                    "method": "GET",
-                    "headers": {
-                        "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
-                        "x-rapidapi-host": "covid-193.p.rapidapi.com"
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => data)
 
-                setCountryData([data]);
-            }
+        const fetchData = async () => {
+            const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
+                    "x-rapidapi-host": "covid-193.p.rapidapi.com"
+                }
+            })
+                .then(response => response.json())
+                .then(data => data);
+            setCountryData([data]);
+        };
+
+        const filterData = () => {
+            const data = countryData[0].response.map(el => {
+                const countriesData = countries.features.filter(country => country.properties.name === el.country)
+                if (countriesData.length) {
+                    return (
+                        {
+                            id: countriesData[0].id,
+                            value: filter[0].name === 'Coronavirus Cases' ? el.cases.total :
+                                filter[0].name === 'Total Recovered' ? el.cases.recovered :
+                                    filter[0].name === 'Total Death' ? el.deaths.total :
+                                        el.cases.active,
+                            name: filter[0].name
+                        }
+                    );
+                } else {
+                    return undefined;
+                }
+            });
+            const filteredData = data.filter(el => typeof (el) !== 'undefined');
+            setDataToRender([...filteredData]);
         }
+
+        if (!countryData.length) {
+            fetchData();
+        } else {
+            filterData();
+        }
+
     }, [filter, countryData]);
 
     const tooltipFormatter = (e) => {
@@ -89,48 +94,52 @@ const WorldMap = ({ filter }) => {
 
     return (
         <div style={{ width: '100%', height: '100%' }}>
-            <ResponsiveChoropleth
-                data={[...dataToRender]}
-                features={countries.features}
-                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                colors={filter[0].mapColor}
-                domain={[0, 1000000]}
-                unknownColor="#666666"
-                label="properties.name"
-                valueFormat=".2s"
-                projectionTranslation={[0.5, 0.5]}
-                projectionRotation={[0, 0, 0]}
-                enableGraticule={false}
-                graticuleLineColor="#dddddd"
-                borderWidth={0.5}
-                borderColor="#152538"
-                tooltip={(e) => tooltipFormatter(e)}
-                legends={[
-                    {
-                        anchor: 'bottom-left',
-                        direction: 'column',
-                        justify: true,
-                        translateX: 20,
-                        translateY: -100,
-                        itemsSpacing: 0,
-                        itemWidth: 94,
-                        itemHeight: 18,
-                        itemDirection: 'left-to-right',
-                        itemTextColor: '#444444',
-                        itemOpacity: 0.85,
-                        symbolSize: 18,
-                        effects: [
-                            {
-                                on: 'hover',
-                                style: {
-                                    itemTextColor: '#000000',
-                                    itemOpacity: 1
+            {dataToRender.length ?
+                <ResponsiveChoropleth
+                    data={[...dataToRender]}
+                    features={countries.features}
+                    margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                    colors={filter[0].mapColor}
+                    domain={[0, 1000000]}
+                    unknownColor="#666666"
+                    label="properties.name"
+                    valueFormat=".2s"
+                    projectionTranslation={[0.5, 0.5]}
+                    projectionRotation={[0, 0, 0]}
+                    enableGraticule={false}
+                    graticuleLineColor="#dddddd"
+                    borderWidth={0.5}
+                    borderColor="#152538"
+                    tooltip={(e) => tooltipFormatter(e)}
+                    legends={[
+                        {
+                            anchor: 'bottom-left',
+                            direction: 'column',
+                            justify: true,
+                            translateX: 20,
+                            translateY: -100,
+                            itemsSpacing: 0,
+                            itemWidth: 94,
+                            itemHeight: 18,
+                            itemDirection: 'left-to-right',
+                            itemTextColor: '#444444',
+                            itemOpacity: 0.85,
+                            symbolSize: 18,
+                            effects: [
+                                {
+                                    on: 'hover',
+                                    style: {
+                                        itemTextColor: '#000000',
+                                        itemOpacity: 1
+                                    }
                                 }
-                            }
-                        ]
-                    }
-                ]}
-            />
+                            ]
+                        }
+                    ]}
+                />
+                :
+                'Loading data...'
+            }
         </div>
     );
 };

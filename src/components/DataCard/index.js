@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WorldMap from '../WorldMap';
+import TableMUI from '../TableMUI';
 
 const filterOptions = [
     {
@@ -26,8 +27,10 @@ const filterOptions = [
 const DataCard = () => {
 
     useEffect(() => {
-        fetchData();
-    },)
+        if (!cards.length) {
+            fetchData();
+        }
+    })
 
     const [cards, setCards] = useState([])
     const [filter, setFilter] = useState([filterOptions[0]])
@@ -38,31 +41,33 @@ const DataCard = () => {
     }
 
     const fetchData = async () => {
-        const data = await fetch('https://api.covid19tracking.narrativa.com/api/2021-01-03')
+        const data = await fetch('https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats')
             .then(response => response.json())
-            .then(data => data)
+            .then(data => {
+                return data
+            })
             .catch(error => console.log(error));
 
         const cardTypes = [
             {
                 title: 'Coronavirus Cases',
                 style: 'card text-white bg-primary',
-                number: data && data.total && data.total.today_confirmed.toLocaleString()
+                number: data && data.data.total_cases && data.data.total_cases.toLocaleString()
             },
             {
                 title: 'Total Recovered',
                 style: 'card text-white bg-success',
-                number: data && data.total && data.total.today_recovered.toLocaleString()
+                number: data && data.data.recovery_cases && data.data.recovery_cases.toLocaleString()
             },
             {
                 title: 'Total Death',
                 style: 'card text-white bg-danger',
-                number: data && data.total && data.total.today_deaths.toLocaleString()
+                number: data && data.data.death_cases && data.data.death_cases.toLocaleString()
             },
             {
                 title: 'Active Cases',
                 style: 'card text-white bg-warning',
-                number: data && data.total && data.total.today_open_cases.toLocaleString()
+                number: data && data.data.currently_infected && data.data.currently_infected.toLocaleString()
             }
         ];
 
@@ -88,8 +93,8 @@ const DataCard = () => {
                     <WorldMap filter={filter} />
                 </div>
             </div>
-            <div style={{ backgroundColor: 'beige', width: '100%' }}>
-                Holaaa
+            <div style={{ backgroundColor: 'beige', width: '100%', boxSizing: 'border-box' }}>
+                <TableMUI filter={filter} />
             </div>
         </div>
 
