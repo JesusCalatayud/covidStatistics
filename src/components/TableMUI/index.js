@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,14 +14,16 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    color: 'white',
   },
   paper: {
     width: '100%',
-    marginBottom: theme.spacing(2),
+    height: 'auto',
+    maxHeight: '85vh',
+    overflowY: 'auto',
   },
   table: {
-    minWidth: 550,
+    minWidth: '100%',
   },
   visuallyHidden: {
     border: 0,
@@ -36,6 +37,33 @@ const useStyles = makeStyles((theme) => ({
     width: 1,
   },
 }));
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    fontWeight: 'bold'
+  }
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+const StyledSortLabel = withStyles(() => ({
+  root: {
+    color: 'white !important'
+  },
+  icon: {
+    color: 'white !important'
+  }
+}))(TableSortLabel);
+
+
 
 export default function TableMUI({ filter }) {
 
@@ -53,7 +81,6 @@ export default function TableMUI({ filter }) {
   useEffect(() => {
 
     const fetchData = async () => {
-      console.log('entro en el fetch')
       const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
         "method": "GET",
         "headers": {
@@ -132,14 +159,13 @@ export default function TableMUI({ filter }) {
       <TableHead>
         <TableRow>
           {headCells.map((headCell) => (
-            <TableCell
+            <StyledTableCell
               key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'default'}
+              align='center'
               sortDirection={orderBy === headCell.id ? order : false}
               colSpan={5}
             >
-              <TableSortLabel
+              <StyledSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
@@ -150,8 +176,8 @@ export default function TableMUI({ filter }) {
                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                   </span>
                 ) : null}
-              </TableSortLabel>
-            </TableCell>
+              </StyledSortLabel>
+            </StyledTableCell>
           ))}
         </TableRow>
       </TableHead>
@@ -181,26 +207,6 @@ export default function TableMUI({ filter }) {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -243,26 +249,23 @@ export default function TableMUI({ filter }) {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
+                    <StyledTableRow
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
+                      <TableCell component="th" id={labelId} scope="row" align="left">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.value}</TableCell>
-                    </TableRow>
+                      <TableCell align="left">{row.value}</TableCell>
+                    </StyledTableRow>
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (53) * emptyRows }}>
+                <StyledTableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={6} />
-                </TableRow>
+                </StyledTableRow>
               )}
             </TableBody>
           </Table>

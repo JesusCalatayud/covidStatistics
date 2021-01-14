@@ -66,7 +66,7 @@ const DataCard = () => {
             },
             {
                 title: 'Active Cases',
-                style: 'card text-white bg-warning',
+                style: 'card text-white',
                 number: data && data.data.currently_infected && data.data.currently_infected.toLocaleString()
             }
         ];
@@ -74,26 +74,28 @@ const DataCard = () => {
         return setCards([...cardTypes]);
     };
 
+    console.log(filter)
+
     return (
-        <div style={{ display: 'flex' }}>
-            <div style={{ display: 'grid', gridTemplateRows: '30vh 70vh' }}>
-                <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '60% 40%' }}>
+            <div style={{ display: 'grid', gridTemplateRows: '25vh 70vh' }}>
+                <div style={{ display: 'flex', gap: '10px', padding: '2rem' }}>
                     {cards.length && cards.map((card, index) => {
                         return (
-                            <div onClick={() => updateFilter(card.title)} className={card.style} style={{ maxWidth: '18rem', width: '12rem', justifySelf: index === 1 || index === 3 ? 'start' : 'end', alignSelf: index === 2 || index === 3 ? 'start' : 'end', cursor: 'pointer' }} key={index}>
+                            <div onClick={() => updateFilter(card.title)} className={card.style} style={{ backgroundColor: 'orange', opacity: card.title === filter[0].name ? '1' : '0.6', maxWidth: '18rem', width: '12rem', justifySelf: index === 1 || index === 3 ? 'start' : 'end', alignSelf: index === 2 || index === 3 ? 'start' : 'end', cursor: 'pointer' }} key={index}>
                                 <div className="card-header">{card.title}</div>
-                                <div className="card-body">
+                                <div className="card-body" >
                                     <h5 className="card-title" style={{ fontWeight: 'bold' }}>{card.number}</h5>
                                 </div>
                             </div>
                         )
                     })}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <WorldMap filter={filter} />
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem'}}>
+                    <WorldMap filter={filter}/>
                 </div>
             </div>
-            <div style={{ backgroundColor: 'beige', width: '100%', boxSizing: 'border-box' }}>
+            <div style={{ width: '100%', padding: '2rem'}}>
                 <TableMUI filter={filter} />
             </div>
         </div>
