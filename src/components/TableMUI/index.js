@@ -53,8 +53,6 @@ const StyledSortLabel = withStyles(() => ({
 
 export default function TableMUI({ filter, countryData }) {
 
-  console.log(filter[0])
-
   const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: filter[0].mapColor === 'blues' ? '#007BFF' :
@@ -65,7 +63,7 @@ export default function TableMUI({ filter, countryData }) {
       fontWeight: 'bold'
     }
   }))(TableCell);
-  
+
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -97,8 +95,8 @@ export default function TableMUI({ filter, countryData }) {
                 el.cases.active));
       });
 
-      setRows([...data])
-
+      const filteredData = data.filter(el => el.value);
+      setRows([...filteredData]);
     };
 
     if (countryData.length) {
