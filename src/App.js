@@ -1,13 +1,13 @@
-import './App.css';
 import DataCard from './components/DataCard';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      <div style={{width: '100%', height: '5vh', backgroundColor: 'beige'}}>
-        Covid Statistics
+    <div>
+      <Header />
+      <div style={{ padding: '1rem' }}>
+        <DataCard />
       </div>
-      <DataCard />
     </div>
   );
 }

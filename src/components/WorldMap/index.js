@@ -25,25 +25,11 @@ const styles = {
     }
 };
 
-const WorldMap = ({ filter }) => {
+const WorldMap = ({ filter, countryData }) => {
 
-    const [countryData, setCountryData] = useState([]);
     const [dataToRender, setDataToRender] = useState([]);
 
     useEffect(() => {
-
-        const fetchData = async () => {
-            const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
-                    "x-rapidapi-host": "covid-193.p.rapidapi.com"
-                }
-            })
-                .then(response => response.json())
-                .then(data => data);
-            setCountryData([data]);
-        };
 
         const filterData = () => {
             const data = countryData[0].response.map(el => {
@@ -67,10 +53,8 @@ const WorldMap = ({ filter }) => {
             setDataToRender([...filteredData]);
         }
 
-        if (!countryData.length) {
-            fetchData();
-        } else {
-            filterData();
+        if (countryData.length) {
+            filterData()
         }
 
     }, [filter, countryData]);

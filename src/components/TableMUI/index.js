@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) => ({
   root: {
     color: 'white',
+    width: '100%'
   },
   paper: {
     width: '100%',
@@ -38,21 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    fontWeight: 'bold'
-  }
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
 
 const StyledSortLabel = withStyles(() => ({
   root: {
@@ -65,33 +51,41 @@ const StyledSortLabel = withStyles(() => ({
 
 
 
-export default function TableMUI({ filter }) {
+export default function TableMUI({ filter, countryData }) {
+
+  console.log(filter[0])
+
+  const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor: filter[0].mapColor === 'blues' ? '#007BFF' :
+        filter[0].mapColor === 'greens' ? '#28A745' :
+          filter[0].mapColor === 'reds' ? '#DC3545' :
+            '#FFA500',
+      color: theme.palette.common.white,
+      fontWeight: 'bold'
+    }
+  }))(TableCell);
+  
+  const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  }))(TableRow);
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('value');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [countryData, setCountryData] = React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rows, setRows] = React.useState([]);
 
 
 
   useEffect(() => {
 
-    const fetchData = async () => {
-      const data = await fetch("https://covid-193.p.rapidapi.com/statistics", {
-        "method": "GET",
-        "headers": {
-          "x-rapidapi-key": "062c452a30msh2c1b18844690b18p1a3587jsn26c7ed67f37d",
-          "x-rapidapi-host": "covid-193.p.rapidapi.com"
-        }
-      })
-        .then(response => response.json())
-        .then(data => data);
-      setCountryData([data]);
-    };
 
     const createRows = () => {
 
@@ -107,12 +101,9 @@ export default function TableMUI({ filter }) {
 
     };
 
-    if (!countryData.length) {
-      fetchData();
-    } else {
-      createRows();
+    if (countryData.length) {
+      createRows()
     }
-
   }, [filter, countryData]);
 
   function createData(name, value) {
